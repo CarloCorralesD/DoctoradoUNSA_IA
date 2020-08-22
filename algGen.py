@@ -1,14 +1,6 @@
-""" from statistics import fmean as mean
-from random import choices
-
-data = [41, 50, 29, 37, 81, 30, 73, 63, 20, 35, 68, 22, 60, 31, 95]
-means = sorted(mean(choices(data, k=len(data))) for i in range(100))
-#print(means)
-print('The sample mean of '+str(mean(data))+' has a .90 confidence interval from '+str(means[5])+' to '+str(means[94]))
- """
-
+# Autor:  Carlo Corrales Delgado
 # usar un AG para calcular el valor minimo de la funcion x2 - 250x - 125
-#import numpy as np
+
 import random
 
 def minimo():
@@ -145,7 +137,7 @@ for i in range(500):
     for j in range(10):
         file.write(str(j)+") "+nuevos[j]+"\n")
     
-    #copiar los nuevos las variables originales para que el ciclo se repita
+    #copiar los nuevos a las variables originales para que el ciclo se repita
     for i in range(10):
         pool[i] = nuevos[i] 
 
