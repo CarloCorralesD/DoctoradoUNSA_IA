@@ -1,0 +1,33 @@
+Parametros:
+Funcion: x2 - 250x - 25,   rango: 0<=x<=511, el minimo es -15650 y el minX es 125
+- Cantidad de individuos: 10
+- Cantidad de genes por individuo: 9
+- Seleccion por torneo (2)
+- Probabilidad de cruzamiento: 0.7
+- Cruzamiento de un punto (punto 3)
+- Probabilidad de mutacion: 0.05
+- Mutacion Bit Flip
+- Cantidad de iteraciones: 500
+
+Poblacion inicial
+0) 111000110
+1) 010111010
+2) 001000000
+3) 110111010
+4) 011111111
+5) 011111001
+6) 010101110
+7) 110100010
+8) 101001111
+9) 100101110
+Calcular la aptitud para cada individuo
+0) 111000110	454	92591
+1) 010111010	186	-11929
+2) 001000000	64	-11929
+3) 110111010	442	84839
+4) 011111111	255	1250
+5) 011111001	249	-274
+6) 010101110	174	-13249
+7) 110100010	418	70199
+8) 101001111	335	28450
+9) 100101110	302	15679
