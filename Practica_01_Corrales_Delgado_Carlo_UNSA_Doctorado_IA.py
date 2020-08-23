@@ -1,5 +1,6 @@
 # Autor:  Carlo Corrales Delgado
 # usar un AG para calcular el valor minimo de la funcion x2 - 250x - 125
+# con restriccion 0 <= x <= 511
 
 import random
 
