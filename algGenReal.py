@@ -17,27 +17,9 @@ def minimo():
                 minY = y
     return ("el minimo es "+str(min)+" y el minX,minY es "+str(minX)+","+str(minY))
 
-def binario(x):
-    bin = ''
-    for i in range(9):
-    #while x>0:
-        bin = str(x%2)+bin
-        x = int(x/2) 
-    return bin
-
-def decimal(b):
-    d = 0
-    for i in range(9):
-        d = d*2 + int(b[i])
-    return d
-
 def fitness(x,y):
     return (x + 2*y -7)**2 + (2*x + y - 5)**2
 
-#print(binario(511))
-#print(np.random.normal())
-#print(fitness(1))
-#print("aleatorio 0-10: "+str(random.randrange(10)))
 
 file = open("minimizarReal.txt",'w')
 file.write("Parametros:\n")
@@ -95,7 +77,7 @@ for i in range(iteraciones):
         sel1 = random.randrange(individuos)
         sel2 = sel1
         while sel2==sel1:
-            sel2 = random.randrange(10)
+            sel2 = random.randrange(individuos)
         file.write(str(sel1)+" - "+str(sel2)+" => "+str(matPool[sel1])+" - "+str(matPool[sel2])+" => "+str(matPoolBin[sel1])+" - "+str(matPoolBin[sel2])+"\n")
         hayCruzamiento = random.randrange(100)
         if hayCruzamiento <= probCruzamiento:
