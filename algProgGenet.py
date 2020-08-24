@@ -46,6 +46,12 @@ def minimo(a,b,c):
     else:
         return c
 
+def printIndividuo(file,i,pool):
+    file.write(str(i)+") |")
+    for j in range(7):
+        file.write(str(pool[i][j])+"|")
+    file.write("\n")
+
 inputOutput = [[0,0],[0.1,0.005],[0.2,0.02],[0.3,0.045],[0.4,0.08],[0.5,0.125],[0.6,0.18],[0.7,0.245],[0.8,0.32],[0.9,0.405]]
 
 file = open("funcionMatematica.txt",'w')
@@ -87,20 +93,21 @@ for i in range(individuos):
         indiv.append(terminales[terAzar])
     #print(indiv)
     pool.append(indiv) 
-    file.write(str(i)+") |")
-    for j in range(7):
-        file.write(str(indiv[j])+"|")
-    file.write("\n")
+    printIndividuo(file,i,pool)
+    # file.write(str(i)+") |")
+    # for j in range(7):
+    #     file.write(str(indiv[j])+"|")
+    # file.write("\n")
 
 #calcular la aptitud para cada individuo:
 fitnessAct = []
-sumTot = 0
 file.write("\nCalcular la aptitud para cada individuo\n")
 for i in range(individuos):
-    file.write("\n"+str(i)+") |")
-    for j in range(7):
-        file.write(str(pool[i][j])+"|")
-    file.write("\n")
+    printIndividuo(file,i,pool)
+    # file.write("\n"+str(i)+") |")
+    # for j in range(7):
+    #     file.write(str(pool[i][j])+"|")
+    # file.write("\n")
     difAct = []
     for j in range(len(inputOutput)):
         file.write("%.4f" % inputOutput[j][0] +"\t"+"%.4f" % inputOutput[j][1] +"\t")
@@ -108,15 +115,16 @@ for i in range(individuos):
         difAct.append(inputOutput[j][1] - funAct)
         file.write("%.8f" % funAct + "\t" + "%.8f" % difAct[j] + "\n")
     fitnessAct.append(fitness(difAct))
-    file.write("Fitness: "+"%.8f" %fitnessAct[i])
+    file.write("Fitness: "+"%.8f" %fitnessAct[i]+"\n")
 
 file.write("\nResumen:\n")
 for i in range(individuos):
-    file.write("\n"+str(i)+") |")
-    for j in range(7):
-        file.write(str(pool[i][j])+"|")
-    file.write("\n")
-    file.write("Fitness: "+"%.8f" %fitnessAct[i])
+    printIndividuo(file,i,pool)
+    # file.write("\n"+str(i)+") |")
+    # for j in range(7):
+    #     file.write(str(pool[i][j])+"|")
+    # file.write("\n")
+    file.write("Fitness: "+"%.8f" %fitnessAct[i]+"\n")
 
 #iteraciones:
 for i in range(iteraciones):
@@ -126,6 +134,7 @@ for i in range(iteraciones):
     while nroPoblacion < individuos:
         hayReplicacion = random.randrange(100)
         if hayReplicacion <= probReplicacion:
+            file.write("Aleatorio: "+str(hayReplicacion)+"\n")
             file.write("**** Replicacion **\n")
             file.write("Seleccionados para torneo (3): ")
             sel1 = random.randrange(individuos)
@@ -147,103 +156,125 @@ for i in range(iteraciones):
             else:
                 mejor = sel3
             file.write("Mejor del torneo (3): "+str(mejor)+"\n")
-            file.write("Insertar individuo: "+str(mejor)+" => "+str(pool[mejor])+"\n")
+            file.write("Insertar individuo: ")
+            printIndividuo(file,mejor,pool)
             nuevos.append(pool[mejor])
             nroPoblacion += 1
             file.write("Tamano de la nueva poblacion: "+str(nroPoblacion)+"\n")
+            if nroPoblacion==individuos:
+                break
 
-"""
-
-    for j in range(individuos/2):   
-        file.write("\nSeleccion de padres\n")
-        sel1 = random.randrange(individuos)
-        sel2 = sel1
-        while sel2==sel1:
-            sel2 = random.randrange(individuos)
-        file.write(str(sel1)+" - "+str(sel2)+" => "+str(matPool[sel1])+" - "+str(matPool[sel2])+"\n")
-        
         hayCruzamiento = random.randrange(100)
         if hayCruzamiento <= probCruzamiento:
-            file.write("Cruzamiento\n")
-            cuantos = random.randrange(1,10)
-            posiciones = []
-            for k in range(cuantos):
-                g = random.randrange(1,10)
-                if g not in posiciones:
-                    posiciones.append(g)
-            posiciones.sort()
-            file.write(str(posiciones)+"\n")
-            nue1 = matPool[sel1]
-            nue2 = matPool[sel2] 
-            #print("nue1 Orig: "+nue1)
-            #print("nue2 Orig: "+nue2)
-            camino1 = ['A','B','C','D','E','F','G','H','I','J']
-            camino2 = ['A','B','C','D','E','F','G','H','I','J']
-            #print(posiciones)
-            for k in range(len(posiciones)):
-                letraAelim1 = matPool[sel2][posiciones[k]]
-                letraAelim2 = matPool[sel1][posiciones[k]]
-                nue1 = nue1[:posiciones[k]]+letraAelim1+nue1[posiciones[k]+1:]
-                nue2 = nue2[:posiciones[k]]+letraAelim2+nue2[posiciones[k]+1:]
-                camino1.remove(letraAelim1)
-                camino2.remove(letraAelim2)
-            noposiciones = []
-            for k in range(10):
-                if k not in posiciones:
-                    noposiciones.append(k)
-            #print("noposiciones: "+str(noposiciones))
-            nopos1 = 0
-            nopos2 = 0
-            for k in range(10):
-                if matPool[sel1][k] in camino1:
-                    nue1 = nue1[:noposiciones[nopos1]]+matPool[sel1][k]+nue1[noposiciones[nopos1]+1:]
-                    camino1.remove(matPool[sel1][k])
-                    nopos1 +=1
-                if matPool[sel2][k] in camino2:
-                    nue2 = nue2[:noposiciones[nopos2]]+matPool[sel2][k]+nue2[noposiciones[nopos2]+1:]
-                    camino2.remove(matPool[sel2][k])
-                    nopos2 +=1
+            file.write("Aleatorio: "+str(hayCruzamiento)+"\n")
+            file.write("**** Cruzamiento **\n")
+            file.write("Seleccionados para torneo (2): ")
+            sel1 = random.randrange(individuos)
+            sel2 = sel1
+            while sel2==sel1:
+                sel2 = random.randrange(individuos)
+            file.write(str(sel1)+" - "+str(sel2)+" => ")
+            f1 = fitnessAct[sel1]
+            f2 = fitnessAct[sel2]
+            if f2>f1:
+                mejor = sel1
+            else:
+                mejor = sel2
+            printIndividuo(file,mejor,pool)
+            mejpool1 = pool[mejor]
 
-            #print("nue1: "+nue1)
-            #print("nue2: "+nue2)
-                 
-        else:
-            file.write("Sin Cruzamiento\n")
-            nue1 = matPool[sel1]
-            nue2 = matPool[sel2] 
-        file.write(nue1+" - "+nue2+"\n") 
+            file.write("Seleccionados para torneo (2): ")
+            sel1 = random.randrange(individuos)
+            sel2 = sel1
+            while sel2==sel1:
+                sel2 = random.randrange(individuos)
+            file.write(str(sel1)+" - "+str(sel2)+" => ")
+            f1 = fitnessAct[sel1]
+            f2 = fitnessAct[sel2]
+            if f2>f1:
+                mejor = sel1
+            else:
+                mejor = sel2
+            printIndividuo(file,mejor,pool)
+            mejpool2 = pool[mejor]
+
+            ptoCruz = random.randrange(7)
+            file.write("Punto para el cruzamiento: "+str(ptoCruz)+"\n")
+            nuevo1 = mejpool1[:ptoCruz]+mejpool2[ptoCruz:]
+            nuevo2 = mejpool2[:ptoCruz]+mejpool1[ptoCruz:]
+            file.write("Descendiente 1: |")
+            for j in range(7):
+                file.write(str(nuevo1[j])+"|")
+            file.write("\n")
+            file.write("Descendiente 2: |")
+            for j in range(7):
+                file.write(str(nuevo2[j])+"|")
+            file.write("\n")
+            if nroPoblacion+2 <= individuos:
+                nuevos.append(nuevo1)
+                nuevos.append(nuevo2)
+                nroPoblacion += 2
+                file.write("Insertar ambos descendientes\n")
+            else:
+                nroPoblacion += 1
+                nroAzar = random.randrange(2)
+                if nroAzar==0:
+                    descen = nuevo1
+                else:
+                    descen = nuevo2
+                nuevos.append(descen)
+                file.write("Insertar 1 descendiente al azar: |")
+                for j in range(7):
+                    file.write(str(descen[j])+"|")
+                file.write("\n")
+            file.write("Tamano de la nueva poblacion: "+str(nroPoblacion)+"\n") 
+            if nroPoblacion==individuos:
+                break
         
         hayMutacion = random.randrange(100)
         if hayMutacion <= probMutacion:
-            file.write("Mutacion 1\n")
-            pos1 = random.randrange(10)
-            pos2 = pos1
-            while pos2==pos1:
-                pos2 = random.randrange(10)
-            if pos1 > pos2:
-                pos1,pos2 = pos2,pos1
-            nue1 = nue1[:pos1]+nue1[pos2]+nue1[pos1+1:pos2]+nue1[pos1]+nue1[pos2+1:]  
-            file.write("Posicion: "+str(pos1)+" - "+str(pos2)+" => "+ nue1 +"\n")
-        else:
-            file.write("Sin Mutacion 1\n")
-        
-        hayMutacion = random.randrange(100)
-        if hayMutacion <= probMutacion:
-            file.write("Mutacion 2\n")
-            pos1 = random.randrange(10)
-            pos2 = pos1
-            while pos2==pos1:
-                pos2 = random.randrange(10)
-            if pos1 > pos2:
-                pos1,pos2 = pos2,pos1
-            nue2 = nue2[:pos1]+nue2[pos2]+nue2[pos1+1:pos2]+nue2[pos1]+nue2[pos2+1:]  
-            file.write("Posicion: "+str(pos1)+" - "+str(pos2)+" => "+ nue2 +"\n")
-        else:
-            file.write("Sin Mutacion 2\n")
+            file.write("Aleatorio: "+str(hayMutacion)+"\n")
+            file.write("**** Mutacion **\n")
+            file.write("Seleccion para torneo (3): ")
+            sel1 = random.randrange(individuos)
+            sel2 = sel1
+            while sel2==sel1:
+                sel2 = random.randrange(individuos)
+            sel3 = sel2
+            while sel3==sel2 or sel3==sel1:
+                sel3 = random.randrange(individuos)
+            file.write(str(sel1)+" - "+str(sel2)+" - "+str(sel3)+"\n")
+            f1 = fitnessAct[sel1]
+            f2 = fitnessAct[sel2]
+            f3 = fitnessAct[sel3]
+            mej = minimo(f1,f2,f3)
+            if mej==f1:
+                mejor = sel1
+            elif mej==f2:
+                mejor = sel2
+            else:
+                mejor = sel3
+            file.write("Mejor del torneo (3): "+str(mejor)+"\n")
+            file.write("Individuo a mutar: ")
+            printIndividuo(file,mejor,pool)
+            alAzar = random.randrange(7)
+            file.write("Gen a mutar: "+str(alAzar)+"\n")
+            nuevo = pool[mejor]
+            if alAzar%2==0:
+                valMutar = random.randrange(len(terminales))
+                nuevo[alAzar] = terminales[valMutar]
+            else:
+                valMutar = random.randrange(len(funciones))
+                nuevo[alAzar] = funciones[valMutar]
+            #print("nuevo por Mutacion: "+str(nuevo)+"\n")
 
-        #ya tenemos a los nuevos integrantes
-        nuevos.append(nue1)
-        nuevos.append(nue2)
+            file.write("Individuo a insertar: |")
+            for j in range(7):
+                file.write(str(nuevo[j])+"|")
+            file.write("\n")
+            nuevos.append(nuevo)
+            nroPoblacion += 1
+            file.write("Tamano de la nueva poblacion: "+str(nroPoblacion)+"\n") 
 
     file.write("\nNueva poblacion\n")
     for j in range(individuos):
@@ -253,15 +284,21 @@ for i in range(iteraciones):
     for i in range(individuos):
         pool[i] = nuevos[i] 
 
-    #calcular el fitness:
-    file.write("\nCalcular el Fitness\n")
-    sumTot = 0
+    #calcular la aptitud para cada individuo:
+    file.write("\nCalcular la aptitud para cada individuo\n")
     for i in range(individuos):
-        poolValFun[i] = fitness(pool[i])
-        poolValInv[i] = 1.0/poolValFun[i]
-        sumTot += poolValInv[i]
+        printIndividuo(file,i,pool)
+        difAct = []
+        for j in range(len(inputOutput)):
+            file.write("%.4f" % inputOutput[j][0] +"\t"+"%.4f" % inputOutput[j][1] +"\t")
+            funAct = valorFun(pool[i],inputOutput[j][0])
+            difAct.append(inputOutput[j][1] - funAct)
+            file.write("%.8f" % funAct + "\t" + "%.8f" % difAct[j] + "\n")
+        fitnessAct.append(fitness(difAct))
+        file.write("Fitness: "+"%.8f" %fitnessAct[i]+"\n")
+
+    file.write("\nResumen:\n")
     for i in range(individuos):
-        poolPorcent[i] = poolValInv[i]/sumTot
-        file.write(str(i)+") "+str(pool[i])+"\t"+str(poolValFun[i])+"\t"+"%.8f" % poolValInv[i] +"\t %.8f" % poolPorcent[i] +"\n")
- 
-"""
+        printIndividuo(file,i,pool)
+        file.write("Fitness: "+"%.8f" %fitnessAct[i]+"\n")
+
