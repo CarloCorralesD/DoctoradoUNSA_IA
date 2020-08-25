@@ -35,8 +35,10 @@ def valorFun(pool,X):
 def fitness(difAct):
     dife = 0
     for i in range(len(difAct)):
-        dife += difAct[i]**2
-    return dife/len(difAct)
+        dife = difAct[i]**2 + dife
+    sol = dife/len(difAct)
+    #print("sol: "+str(sol)+" difAct: "+str(difAct))
+    return sol
 
 def minimo(a,b,c):
     if a<b and a<c:
@@ -94,36 +96,29 @@ for i in range(individuos):
     #print(indiv)
     pool.append(indiv) 
     printIndividuo(file,i,pool)
-    # file.write(str(i)+") |")
-    # for j in range(7):
-    #     file.write(str(indiv[j])+"|")
-    # file.write("\n")
+
 
 #calcular la aptitud para cada individuo:
 fitnessAct = []
 file.write("\nCalcular la aptitud para cada individuo\n")
 for i in range(individuos):
     printIndividuo(file,i,pool)
-    # file.write("\n"+str(i)+") |")
-    # for j in range(7):
-    #     file.write(str(pool[i][j])+"|")
-    # file.write("\n")
     difAct = []
     for j in range(len(inputOutput)):
+        #print("inputOutput[j]: "+str(inputOutput[j]))
         file.write("%.4f" % inputOutput[j][0] +"\t"+"%.4f" % inputOutput[j][1] +"\t")
         funAct = valorFun(pool[i],inputOutput[j][0])
+        #print("funAct: "+str(funAct))
         difAct.append(inputOutput[j][1] - funAct)
+        #print("difAct[j]: "+str(difAct[j]))
         file.write("%.8f" % funAct + "\t" + "%.8f" % difAct[j] + "\n")
     fitnessAct.append(fitness(difAct))
+    #print("fitnessAct[i]: "+str(fitnessAct[i]))
     file.write("Fitness: "+"%.8f" %fitnessAct[i]+"\n")
 
 file.write("\nResumen:\n")
 for i in range(individuos):
     printIndividuo(file,i,pool)
-    # file.write("\n"+str(i)+") |")
-    # for j in range(7):
-    #     file.write(str(pool[i][j])+"|")
-    # file.write("\n")
     file.write("Fitness: "+"%.8f" %fitnessAct[i]+"\n")
 
 #iteraciones:
@@ -134,7 +129,7 @@ for i in range(iteraciones):
     while nroPoblacion < individuos:
         hayReplicacion = random.randrange(100)
         if hayReplicacion <= probReplicacion:
-            file.write("Aleatorio: "+str(hayReplicacion)+"\n")
+            file.write("Aleatorio: "+str(1.0*hayReplicacion/100)+"\n")
             file.write("**** Replicacion **\n")
             file.write("Seleccionados para torneo (3): ")
             sel1 = random.randrange(individuos)
@@ -166,7 +161,7 @@ for i in range(iteraciones):
 
         hayCruzamiento = random.randrange(100)
         if hayCruzamiento <= probCruzamiento:
-            file.write("Aleatorio: "+str(hayCruzamiento)+"\n")
+            file.write("Aleatorio: "+str(1.0*hayCruzamiento/100)+"\n")
             file.write("**** Cruzamiento **\n")
             file.write("Seleccionados para torneo (2): ")
             sel1 = random.randrange(individuos)
@@ -233,7 +228,7 @@ for i in range(iteraciones):
         
         hayMutacion = random.randrange(100)
         if hayMutacion <= probMutacion:
-            file.write("Aleatorio: "+str(hayMutacion)+"\n")
+            file.write("Aleatorio: "+str(1.0*hayMutacion/100)+"\n")
             file.write("**** Mutacion **\n")
             file.write("Seleccion para torneo (3): ")
             sel1 = random.randrange(individuos)
@@ -278,7 +273,11 @@ for i in range(iteraciones):
 
     file.write("\nNueva poblacion\n")
     for j in range(individuos):
-        file.write(str(j)+") "+str(nuevos[j])+"\n")
+        file.write(str(j)+") |")
+        for k in range(7):
+            file.write(str(nuevos[j][k])+"|")
+        file.write("\n")
+        #+str(nuevos[j])+"\n")
     
     #copiar los nuevos a las variables originales para que el ciclo se repita
     for i in range(individuos):
@@ -294,7 +293,7 @@ for i in range(iteraciones):
             funAct = valorFun(pool[i],inputOutput[j][0])
             difAct.append(inputOutput[j][1] - funAct)
             file.write("%.8f" % funAct + "\t" + "%.8f" % difAct[j] + "\n")
-        fitnessAct.append(fitness(difAct))
+        fitnessAct[i] = fitness(difAct)
         file.write("Fitness: "+"%.8f" %fitnessAct[i]+"\n")
 
     file.write("\nResumen:\n")
