@@ -7,7 +7,7 @@ import random
 
 pi = 3.14159
 mu = 0 
-lamb = 0.0002
+lamb = 0.00002
 
 def fitness(x,y):
     return (x + 2*y -7)**2 + (2*x + y - 5)**2
