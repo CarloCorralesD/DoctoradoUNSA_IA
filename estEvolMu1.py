@@ -106,7 +106,7 @@ for i in range(iteraciones):
         nroAleat3 = random.random()
         nroAleat4 = random.random()
         #file.write("Aleatorio 1: "+str(nroAleat3)+"\t- Aleatorio 2: "+str(nroAleat4)+"\n")
-        nuevoN = [nuevo[0]+nroGaus(desvNuevo[0],nroAleat3) , nuevo[1]+nroGaus(desvNuevo[1],nroAleat4)]
+        nuevoN = [nuevo[0]+nroGaus(desvNuevoN[0],nroAleat3) , nuevo[1]+nroGaus(desvNuevoN[1],nroAleat4)]
         #file.write(str(nuevoN)+"\t"+str(desvNuevoN)+"\n")
         cont +=1
         #print("nuevoN: "+str(nuevoN))
