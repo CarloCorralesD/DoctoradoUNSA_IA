@@ -52,7 +52,7 @@ poolValFun = []
 individ = []
 for i in range(mu):
     poolValFun.append(fitness(pool[i][0],pool[i][1]))
-    file.write(str(i)+") "+str(pool[i])+"\t["+str(desvPool[i][0])+" , "+str(desvPool[i][1])+"]\t"+str(poolValFun[i])+"\n")
+    file.write(str(i)+") "+str(pool[i])+"\t"+str(desvPool[i])+"\t"+str(poolValFun[i])+"\n")
     individ.append([pool[i][0],pool[i][1],desvPool[i][0],desvPool[i][1],poolValFun[i]])
 
 #iteraciones:

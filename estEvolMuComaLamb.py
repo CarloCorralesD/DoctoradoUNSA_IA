@@ -1,5 +1,5 @@
 # Autor:  Carlo Corrales Delgado
-# usar la estrategia Evolutiva Mu+Lambda para calcular el valor minimo de la funcion f(x,y) = (x + 2y -7)2 + (2x + y - 5)2
+# usar la estrategia Evolutiva Mu,Lambda para calcular el valor minimo de la funcion f(x,y) = (x + 2y -7)2 + (2x + y - 5)2
 # con restricciones -10 <= x <= 10      and     -10 <= y <= 10
 import math
 import sys
@@ -21,11 +21,11 @@ def myFunc(e):
     return e[4]
 #####
 
-file = open("MuMasLambda.txt",'w')
-file.write("Estrategia Evolutiva  Mu+Lambda\n")
+file = open("MuComaLambda.txt",'w')
+file.write("Estrategia Evolutiva  Mu,Lambda\n")
 file.write("Parametros:\n")
 file.write("- Cantidad de individuos (Mu): 8\n")
-file.write("- Cantidad de descendientes (Lamb): 6\n")
+file.write("- Cantidad de descendientes (Lamb): 12\n")
 file.write("- Desviacion estandar inicial: 0.2\n")
 file.write("- Cantidad de genes por individuo: 2\n")
 file.write("- Seleccion por torneo (2)\n")
