@@ -5,17 +5,19 @@ import math
 import sys
 import random
 
+
 def fitness(x,y):
     return (x + 2*y -7)**2 + (2*x + y - 5)**2
+
 def fun(x,desv):
-    return 1/(desv*math.sqrt(2*pi))*math.exp(-(x-mu)**2 / (2*desv**2))
+    return 1/(desv*math.sqrt(2*pi))*math.exp(-(x-0)**2 / (2*desv**2))
 def nroGaus(desv,prob):
     acu = 0
     x = -8
     while acu<prob and x<8:
-        area = inter*fun(x,desv)
+        area = lamb*fun(x,desv)
         acu += area
-        x += inter
+        x += lamb
     return x
 def myFunc(e):
     return e[4]
@@ -34,7 +36,7 @@ desv = 0.2
 pi = 3.14159
 mu = 8
 lamb = 1
-inter = 0.0002
+inter = 0.00002
 n = 2
 
 #poblacion Inicial:
@@ -92,7 +94,7 @@ for i in range(iteraciones):
     file.write("Mutacion\n")
     cont = 0
     nuevoN = [-11,11]
-    while (nuevoN[0]<-10 or nuevoN[0]>10 or nuevoN[1]<-10 or nuevoN[1]>10) and cont<10:
+    while (nuevoN[0]<-10 or nuevoN[0]>10 or nuevoN[1]<-10 or nuevoN[1]>10) and cont<50:
         nroAleat1 = random.random()
         nroAleat2 = random.random()
         #file.write("Aleatorio 1: "+str(nroAleat1)+"\t- Aleatorio 2: "+str(nroAleat2)+"\n")
@@ -115,10 +117,8 @@ for i in range(iteraciones):
     file.write(str(nuevoN)+"\t"+str(desvNuevoN)+"\n")
     if nuevoN[0]<-10 or nuevoN[0]>10 or nuevoN[1]<-10 or nuevoN[1]>10:
         print("error en nuevoN: "+str(nuevoN))
-    """
-    nuevoN = nuevo
-    desvNuevoN = desvNuevo
-    """
+
+
     file.write("\nUnir mu individuos con lambda descendientes\n")
     fitNuevoN = fitness(nuevoN[0],nuevoN[1])
     #file.write("8) "+str(nuevoN)+"\t"+str(desvNuevoN)+"\t"+str(fitNuevoN)+"\n")

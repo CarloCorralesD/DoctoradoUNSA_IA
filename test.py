@@ -10,10 +10,12 @@ def fun(x,desv):
 def nroGaus(desv,prob):
     acu = 0
     x = -8
-    while acu<prob or x>8:
+    while acu<prob and x<8:
         area = lamb*fun(x,desv)
         acu += area
         x += lamb
     return x
 
-print(nroGaus(float(sys.argv[2]),float(sys.argv[1])))
+#print(nroGaus(float(sys.argv[2]),float(sys.argv[1])))
+print("El nro gaus es: ")
+print(nroGaus(0.594603558, 0.24588458275609104))

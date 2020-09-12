@@ -8,7 +8,7 @@ import random
 def fitness(x,y):
     return (x + 2*y -7)**2 + (2*x + y - 5)**2
 def fun(x,desv):
-    return 1/(desv*math.sqrt(2*pi))*math.exp(-(x-mu)**2 / (2*desv**2))
+    return 1/(desv*math.sqrt(2*pi))*math.exp(-(x-0)**2 / (2*desv**2))
 def nroGaus(desv,prob):
     acu = 0
     x = -8
