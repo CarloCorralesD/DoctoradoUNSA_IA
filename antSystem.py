@@ -114,6 +114,8 @@ for i in range(iteraciones):
         ciudadesRestantes = range(ciudades)
         while len(ciudadesRestantes)>1:
             suma = 0
+            ciudadesRestantes.remove(ciudad)
+            #print(ciudadesRestantes)
             for k in range(ciudades):
                 if k in ciudadesRestantes:
                     #file.write("probando..."+str(feromonas)+" ciudad: "+str(ciudad)+ " k: "+str(k)+"\n")
@@ -146,8 +148,6 @@ for i in range(iteraciones):
             file.write("Ciudad Siguiente: "+chr(65+acumCont)+"\n")
             #print("Ciudad a elim: "+str(ciudad))
             camino.append(ciudad)
-            ciudadesRestantes.remove(ciudad)
-            #print(ciudadesRestantes)
             ciudad = acumCont
         camino.append(ciudadesRestantes[0])
             
@@ -186,3 +186,4 @@ for i in range(iteraciones):
                 file.write(" = "+str(sumTot)+"\n")
                 feromonas[i][j] = sumTot
 
+file.close()
