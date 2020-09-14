@@ -159,6 +159,7 @@ for i in range(iteraciones):
 
     file.write("\nResumen de Hormigas:\n")
     costoCaminos = []
+    mejorcosto = 999999
     for j in range(individuos):
         file.write("Hormiga "+str(j)+": (")
         costo = 0
@@ -168,6 +169,8 @@ for i in range(iteraciones):
         file.write(chr(65+caminosHormigas[j][ciudades-1]))
         file.write(") - Costo: "+str(costo)+"\n")
         costoCaminos.append(costo)
+        if mejorcosto > costo:
+            mejorcosto = costo
 
     file.write("\nNuevos valores para Feromonas\n")
     for i in range(individuos):
@@ -186,4 +189,5 @@ for i in range(iteraciones):
                 file.write(" = "+str(sumTot)+"\n")
                 feromonas[i][j] = sumTot
 
+print("La mejor hormiga hizo un camino de "+str(mejorcosto))
 file.close()

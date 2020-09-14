@@ -29,7 +29,7 @@ iteraciones = 100
 alp = 1
 bet = 1
 individuos = 3
-ciudades = 10 
+ciudades = 10 #6 para el 1er problema 
 ciudadIni = 4 #E
 p = 0.5
 Q = 1.0
@@ -37,7 +37,7 @@ q0 = 0.5
 e_phi = 0.5
 
 distancia = [[],[12],[3,9],[23,18,89],[1,3,56,87],[5,41,21,46,55],[23,45,12,75,22,21],[56,5,48,17,86,76,11],[12,41,14,50,14,54,57,63],[11,27,29,42,33,81,48,24,9]]
-#distancia = [[],[12],[3,9],[23,18,89],[1,3,56,87]]  #para el 1er problema
+#distancia = [[],[12],[3,9],[23,18,89],[1,3,56,87],[5,41,21,46.5,55]]  #para el 1er problema
 for i in range(ciudades):
     distancia[i].append(0)
     for j in range(i+1,ciudades):
@@ -114,46 +114,65 @@ for i in range(iteraciones):
         ciudad = ciudadIni
         file.write("Ciudad Inicial: "+chr(65+ciudad)+"\n")
         ciudadesRestantes = range(ciudades)
-        """
         while len(ciudadesRestantes)>1:
+            ciudadOrig = ciudad
             ciudadesRestantes.remove(ciudad)
-            q = ...
-            file.write("Valor de q: "+str(q))
-            suma = 0
-            for k in range(ciudades):
-                if k in ciudadesRestantes:
-                    #file.write("probando..."+str(feromonas)+" ciudad: "+str(ciudad)+ " k: "+str(k)+"\n")
-                    tn = pow(feromonas[ciudad][k],alp)*pow(visibilidad[ciudad][k],bet)
-                    file.write(chr(65+ciudad)+"-"+chr(65+k)+": t = "+str(feromonas[ciudad][k])+" n = "+str(visibilidad[ciudad][k])+" t*n = "+str(tn)+"\n")
-                    suma += tn
-            file.write("Suma: "+str(suma)+"\n")
-            probab = []
-            for k in range(ciudades):
-                if k in ciudadesRestantes:
-                    if suma!=0:
-                        prob = pow(feromonas[ciudad][k],alp)*pow(visibilidad[ciudad][k],bet)/suma
+            q = random.random()
+            file.write("\nValor de q: "+str(q))
+            if q < q0:
+                file.write("\nRecorrido por Intensificacion\n")
+                mayor = 0
+                mayortn = 0
+                for k in range(ciudades):
+                    if k in ciudadesRestantes:
+                        tn = feromonas[ciudad][k] * pow(visibilidad[ciudad][k],bet)
+                        file.write(chr(65+ciudad)+"-"+chr(65+k)+": t = "+str(feromonas[ciudad][k])+" n = "+str(visibilidad[ciudad][k])+" t*n = "+str(tn)+"\n")
+                        if mayortn < tn:
+                            mayortn = tn
+                            mayor = k
+                file.write("Ciudad Siguiente: "+chr(65+mayor)+"\n")
+                camino.append(ciudad)
+                ciudad = mayor
+
+            else:
+                file.write("\nRecorrido por Diversificacion\n") #igual que AS
+                suma = 0
+                for k in range(ciudades):
+                    if k in ciudadesRestantes:
+                        tn = feromonas[ciudad][k] * pow(visibilidad[ciudad][k],bet)
+                        file.write(chr(65+ciudad)+"-"+chr(65+k)+": t = "+str(feromonas[ciudad][k])+" n = "+str(visibilidad[ciudad][k])+" t*n = "+str(tn)+"\n")
+                        suma += tn
+                file.write("Suma: "+str(suma)+"\n")
+                probab = []
+                for k in range(ciudades):
+                    if k in ciudadesRestantes:
+                        if suma!=0:
+                            prob = pow(feromonas[ciudad][k],alp)*pow(visibilidad[ciudad][k],bet)/suma
+                        else:
+                            prob = 0.0
+                        file.write(chr(65+ciudad)+"-"+chr(65+k)+": prob = "+str(prob)+"\n")
+                        probab.append(prob)
                     else:
-                        prob = 0.0
-                    file.write(chr(65+ciudad)+"-"+chr(65+k)+": prob = "+str(prob)+"\n")
-                    probab.append(prob)
-                else:
-                    probab.append(0.0)
-            Aleat = random.random()
-            file.write("Nro aleat para la probabilidad: "+str(Aleat)+"\n")
-            acum = 0
-            acumCont = 0
-            for k in range(ciudades):
-                if acum<Aleat:
-                    acum += probab[k]
-                    acumCont +=1
-                else:
-                    break
-            acumCont -=1
-            file.write("Ciudad Siguiente: "+chr(65+acumCont)+"\n")
-            #print("Ciudad a elim: "+str(ciudad))
-            camino.append(ciudad)
-            
-            ciudad = acumCont
+                        probab.append(0.0)
+                Aleat = random.random()
+                file.write("Nro aleat para la probabilidad: "+str(Aleat)+"\n")
+                acum = 0
+                acumCont = 0
+                for k in range(ciudades):
+                    if acum<Aleat:
+                        acum += probab[k]
+                        acumCont +=1
+                    else:
+                        break
+                acumCont -=1
+                file.write("Ciudad Siguiente: "+chr(65+acumCont)+"\n")
+                camino.append(ciudad)
+                ciudad = acumCont
+            ciudadDest = ciudad
+            antFer = feromonas[ciudadOrig][ciudadDest]
+            feromonas[ciudadOrig][ciudadDest] = (1-e_phi)*antFer + e_phi*0.1 
+            feromonas[ciudadDest][ciudadOrig] = feromonas[ciudadOrig][ciudadDest]
+            file.write("Actualizamos el arco "+chr(65+ciudadOrig)+"-"+chr(65+ciudadDest)+"(v):(1-e)*"+str(antFer)+" + e*0.1 = "+str(feromonas[ciudadOrig][ciudadDest])+"\n")
         camino.append(ciudadesRestantes[0])
             
         file.write("Hormiga "+str(j)+": "+chr(65+ciudadIni))
@@ -164,6 +183,8 @@ for i in range(iteraciones):
 
     file.write("\nResumen de Hormigas:\n")
     costoCaminos = []
+    mejorcosto = 99999999
+    mejorj = 0
     for j in range(individuos):
         file.write("Hormiga "+str(j)+": (")
         costo = 0
@@ -173,22 +194,30 @@ for i in range(iteraciones):
         file.write(chr(65+caminosHormigas[j][ciudades-1]))
         file.write(") - Costo: "+str(costo)+"\n")
         costoCaminos.append(costo)
+        if mejorcosto > costo:
+            mejorcosto = costo
+            mejorj = j
+    file.write("-----------\n")
+    file.write("Mejor Hormiga Global: "+str(mejorj)+":  ")
+    for j in range(ciudades):
+        file.write(chr(65+caminosHormigas[mejorj][j])+" - ")
+    file.write(" Costo: "+str(mejorcosto)+"\n")
+    file.write("-----------\n")
 
     file.write("\nNuevos valores para Feromonas\n")
-    for i in range(individuos):
-        for j in range(individuos):
+    for i in range(ciudades):
+        for j in range(ciudades):
             if i!=j:
-                evap = feromonas[i][j]*(1-p)
-                file.write(chr(65+i)+"-"+chr(65+j)+": Feromona = "+str(evap))
-                sumTot = evap
-                for k in range(individuos):
-                    if pasoPor(i,j,k,caminosHormigas):
-                        costoIf = Q/costoCaminos[k] 
-                    else:
-                        costoIf = 0.0
-                    file.write(" + "+str(costoIf))
-                    sumTot += costoIf
-                file.write(" = "+str(sumTot)+"\n")
-                feromonas[i][j] = sumTot
-"""
+                if pasoPor(i,j,mejorj,caminosHormigas):
+                    evap = feromonas[i][j] * (1-p)
+                    deposito = p * mejorcosto
+                else:
+                    evap = feromonas[i][j]
+                    deposito = 0.0     
+                sumTot = evap + deposito
+                feromonas[i][j] = sumTot  #hay que actualizar [j][i] tambien
+                feromonas[j][i] = sumTot
+                file.write(chr(65+i)+"-"+chr(65+j)+": Feromona = "+str(evap)+" + "+str(deposito)+" = "+ str(sumTot)+"\n")
+
+print("La mejor hormiga hizo un camino de "+str(mejorcosto))
 file.close()
