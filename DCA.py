@@ -9,7 +9,6 @@ import random
 
 def separa(linea):
     dato = []
-    nro = ""
     pos = 0 
     while(True):
         nro = ""
