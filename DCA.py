@@ -15,7 +15,7 @@ def separa(linea):
         while len(linea)>pos and linea[pos]!=',' and linea[pos]!='?':
             nro += linea[pos]
             pos +=1
-        #print(dato)
+        # print(dato)
         if len(nro)>0:
             dato.append(int(nro))
         if len(linea)==pos:
